@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+
+<body>
+    <div id="header">
+        <a href="home.html" title="Apples">
+            <img id="logo" src="logo.png">
+        </a>
+        <h1>AppleADay</h1>
+    </div>
+
+    <div id="main">
+
+    </div>
+
+</body>
+
+<script>
+    bookmark()
+
+    async function bookmark() {
+        let mainDiv = document.getElementById("main")
+        let data = await fetch (`/retrieveBook`)
+        let info = await data.json()
+        console.log(info)
+
+        for (let i = 0; i < info.length; i++) {
+        let Title = info[i].Title
+
+
+        let SearchDiv = document.createElement("div")
+        SearchDiv.classList.add("HistorySearchDiv")
+        mainDiv.appendChild(SearchDiv)
+        
+        let IndexDiv = document.createElement("div")
+        let IndexDisplay = document.createElement("h1")
+        IndexDisplay.innerHTML = i + 1
+        SearchDiv.appendChild(IndexDiv)
+        IndexDiv.appendChild(IndexDisplay)
+
+        
+        let TitleDiv = document.createElement("div")
+        TitleDiv.classList.add("TitleH")
+        let SearchDisplay = document.createElement("p1")
+        SearchDisplay.innerHTML = Title
+        SearchDisplay.classList.add("Search")
+        SearchDiv.appendChild(TitleDiv)
+        TitleDiv.appendChild(SearchDisplay)
+
+        let ButtonDiv = document.createElement("div")
+        let Button = document.createElement("button")
+        Button.innerHTML = "Open"
+        Button.classList.add("SearchHistoryButton")
+        SearchDiv.appendChild(ButtonDiv)
+        ButtonDiv.appendChild(Button)
+
+        let DeleteButton = document.createElement("button")
+        DeleteButton.innerHTML = "Clear"
+        let DeleteButtonDiv = document.createElement("div")
+        DeleteButtonDiv.appendChild(DeleteButton)
+        SearchDiv.appendChild(DeleteButtonDiv)
+
+        
+        
+       
+
+        Button.addEventListener("click", function() {
+            Link(this.parentNode.parentNode)
+    })
+
+    DeleteButton.addEventListener("click", function() {
+            Clear(this.parentNode.parentNode)
+    })
+    }
+}
+
+function Link(card) {
+    console.log(card)
+
+    let Title = card.getElementsByClassName("TitleH")[0].getElementsByClassName("Search")[0].innerHTML
+    console.log(Title)
+
+    let total = ""+Title
+
+    //OPENING the info page (has further detail on the topic)
+    let infoOpen = document.createElement("a")
+    infoOpen.href = "detail.html?total="+total
+    infoOpen.click()
+
+}
+
+async function Clear (card) {
+    console.log(card)
+
+    let Title = card.getElementsByClassName("TitleH")[0].getElementsByClassName("Search")[0].innerHTML
+    console.log(Title)
+
+    let request = await fetch(`/ClearBook?info=${Title}`)
+    let response = await request.json()
+    console.log(response)
+
+    card.remove(card)
+}
+
+
+
+</script>

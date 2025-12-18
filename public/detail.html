@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+
+<body>
+    <div id="header">
+        <a href="home.html" title="Apples">
+            <img id="logo" src="logo.png">
+        </a>
+        <h1>AppleADay</h1>
+    </div>
+    <label>Bookmark</label>
+    <input type="checkbox" id="myBook" onclick="Bookmark()">
+    
+    <div id="main">
+        
+        
+        <div id="detail">
+            <a href="https://health.gov/myhealthfinder" title="MyHealthfinder">
+                <img src="https://health.gov/themes/custom/healthfinder/images/MyHF.svg" alt="MyHealthfinder"/>
+            </a>
+            
+        </div>
+    </div>
+
+</body>
+
+
+<script>
+    window.addEventListener("load", function(){
+        onload()
+    })
+    run()
+
+    async function onload() {
+        let URL = new URLSearchParams(window.location.search);
+        let searchID = URL.get('total')
+    
+        let data = await fetch(`/checkLoad?value=${searchID}`)
+        let jsonresponse = await data.json()
+        console.log(jsonresponse)
+
+        if (jsonresponse === "success") {
+            let check = document.getElementById("myBook")
+            check.checked = true
+            console.log("hello")
+        } else if (jsonresponse === "fail") {
+            let check = document.getElementById("myBook")
+            check.checked = false
+            console.log("goodbye")
+        }
+    }
+
+    async function Bookmark() {
+        let URL = new URLSearchParams(window.location.search);
+        let searchID = URL.get('total')
+        let check = document.getElementById("myBook")
+        let value = check.checked
+        console.log(value)
+
+        if (value === true) {
+            let data = await fetch(`/bookmark?value=${searchID}`)
+            let jsonresponse = await data.json()
+            console.log(jsonresponse)
+        }
+
+        if (value === false) {
+            let data = await fetch(`/bookmarkUncheck?value=${searchID}`)
+            let jsonresponse = await data.json()
+            console.log(jsonresponse)
+        }
+
+    }
+
+    async function run() {
+        var dataDiv = document.getElementById('detail');
+        let URL = new URLSearchParams(window.location.search);
+        let value = URL.get('total')
+
+        let data = await fetch(`/detail?value=${value}`)
+        let jsonData = await data.json()
+
+        let info = JSON.parse(jsonData)
+
+
+
+        let Title = info.Title
+        let Categories = info.Categories
+        let Time = info.LastUpdate
+        let Image = info.ImageURL
+        let Content = info.Detail
+        
+       
+        let TitleDiv = document.createElement("div")
+        dataDiv.appendChild(TitleDiv)
+        let TitleDisplay = document.createElement("h1")
+        TitleDisplay.innerHTML = Title
+        TitleDiv.appendChild(TitleDisplay)
+
+        let CategoriesDiv = document.createElement("div")
+        dataDiv.appendChild(CategoriesDiv)
+        let CategoriesDisplay = document.createElement("h2")
+        CategoriesDisplay.innerHTML = Categories
+        CategoriesDiv.appendChild(CategoriesDisplay)
+
+        let TimeDiv = document.createElement("div")
+        dataDiv.appendChild(TimeDiv)
+        let TimeDisplay = document.createElement("p1")
+
+        var utcSeconds = Time;
+        var TimeConverted = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        TimeConverted.setUTCSeconds(utcSeconds);
+        //https://stackoverflow.com/questions/4631928/convert-utc-epoch-to-local-date
+
+        TimeDisplay.innerHTML = TimeConverted
+        TimeDiv.appendChild(TimeDisplay)
+
+        let ImageDiv = document.createElement("div")
+        dataDiv.appendChild(ImageDiv)
+        ImageDiv.classList.add("IMAGEDIVDETAIL")
+        let ImageDisplay = document.createElement("img")
+        ImageDisplay.src = Image
+        ImageDisplay.classList.add("DETAILIMAGE")
+        ImageDiv.appendChild(ImageDisplay)
+
+
+
+        for (let i = 0; i < Content.length; i++) {
+            let current = Content[i]
+            let cTitle = current.Title
+            let cContent = current.Content
+
+
+            if (cTitle === null) {
+                cTitle = "Overview"
+            }
+
+            let ContentDiv = document.createElement("div")
+            let ContentTitleDiv = document.createElement("div")
+            let ContentTitleDisplay = document.createElement("h1")
+            ContentTitleDisplay.innerHTML = "" +cTitle
+
+            let ContentContentDiv = document.createElement("div")
+            let ContentContentDisplay = document.createElement("p1")
+            ContentContentDisplay.innerHTML = ""+ cContent
+
+            ContentDiv.appendChild(ContentTitleDiv)
+            ContentDiv.appendChild(ContentContentDiv)
+            ContentTitleDiv.appendChild(ContentTitleDisplay)
+            ContentContentDiv.appendChild(ContentContentDisplay)
+            dataDiv.appendChild(ContentDiv)
+        }
+
+    }
+    
+
+    
+
+
+</script>

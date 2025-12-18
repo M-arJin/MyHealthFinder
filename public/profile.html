@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+
+<body>
+    <div id="header">
+        <a href="home.html" title="Apples">
+            <img id="logo" src="logo.png">
+        </a>
+        <h1>AppleADay</h1>
+    </div>
+
+    <div id="main">
+        <h1 id="UserGreet"></h1>
+    </div>
+
+    <div id="EditProperties">
+        <div class="Tobacco">
+            <h2>Tobacco Use (0 = no, 1 = yes)</h2>
+            <input type="number" min="0" max="1" value="0">
+        </div>
+        <div class="PregnancyStatus">
+            <h2>Pregant (0 = no, 1 = yes)</h2>
+            <input type="number" min="0" max="1" value="0">
+        </div>
+        <div class="GenderStatus">
+            <h2>Sex (male or female)</h2>
+            <select>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div class="Age">
+            <h2>Age:</h2>
+            <input type="number" min="8" max="100" value="21">
+        </div>
+        <div class="SexuallyActive">
+            <h2>Sexually Active (0 = no,1 = yes)</h2>
+            <input type="number" min="0" max="1" value="0">
+        </div>
+        <button onclick="updateProperties()">Submit</button>
+        
+    </div>
+
+    <div id="Overall">
+        <div id="SearchH">
+        </div>
+    </div>
+
+    <div id="DeleteProfileDiv">
+        <button onclick="DeleteProfile()" id="DPButton">Delete Profile</button>
+    </div>
+
+</body>
+
+<script>
+
+User()
+
+async function updateProperties() {
+
+    let overall = document.getElementById("EditProperties")
+    console.log(overall)
+
+    let Tobacco = overall.getElementsByClassName("Tobacco")[0].getElementsByTagName("input")[0].value
+    let PregnancyStatus = overall.getElementsByClassName("PregnancyStatus")[0].getElementsByTagName("input")[0].value
+    let Gender = overall.getElementsByClassName("GenderStatus")[0].getElementsByTagName("select")[0].value
+    let Age = overall.getElementsByClassName("Age")[0].getElementsByTagName("input")[0].value
+    let SexuallyActive = overall.getElementsByClassName("SexuallyActive")[0].getElementsByTagName("input")[0].value
+
+
+    console.log(Tobacco)
+    console.log(PregnancyStatus)
+    console.log(Gender)
+    console.log(Age)
+    console.log(SexuallyActive)
+
+    let data = await fetch (`/PropertyUpdate?userProperty=${Tobacco}, ${PregnancyStatus}, ${Gender}, ${Age}, ${SexuallyActive}`)
+    let response = await data.json()
+    console.log(response)
+    if (response === "success") {
+        let propertyupload = document.createElement("a")
+        propertyupload.href = "propertySpecific.html"
+        propertyupload.click()
+    }
+}
+
+
+async function User() {
+    let UserDetails = await fetch(`/userdetails`)
+    let result = await UserDetails.json()
+    console.log(result)
+
+    let userID = result[0].ID
+    let userName = result[0].Name
+    console.log(userID)
+    console.log(userName)
+
+    if (userName === "") {
+        let back = document.createElement("a")
+        back.href = "home.html"
+        back.click()
+    }
+
+    let Greeting = document.getElementById("UserGreet")
+    Greeting.innerHTML = "Welcome "+userName+"!"
+
+    var data = document.getElementById('SearchH');
+    console.log(data)
+
+    let SearchHistory = await fetch(`/requestSH?info=${userID}`)
+    let resultSH = await SearchHistory.json()
+    console.log(resultSH)
+
+    for (let i = 0; i < resultSH.length; i++) {
+        let Title = resultSH[i].Title
+
+
+        let SearchDiv = document.createElement("div")
+        SearchDiv.classList.add("HistorySearchDiv")
+        data.appendChild(SearchDiv)
+        
+        let IndexDiv = document.createElement("div")
+        let IndexDisplay = document.createElement("h1")
+        IndexDisplay.innerHTML = i + 1
+        SearchDiv.appendChild(IndexDiv)
+        IndexDiv.appendChild(IndexDisplay)
+
+        
+        let TitleDiv = document.createElement("div")
+        TitleDiv.classList.add("TitleH")
+        let SearchDisplay = document.createElement("p1")
+        SearchDisplay.innerHTML = Title
+        SearchDisplay.classList.add("Search")
+        SearchDiv.appendChild(TitleDiv)
+        TitleDiv.appendChild(SearchDisplay)
+
+        let ButtonDiv = document.createElement("div")
+        let Button = document.createElement("button")
+        Button.innerHTML = "Open"
+        Button.classList.add("SearchHistoryButton")
+        SearchDiv.appendChild(ButtonDiv)
+        ButtonDiv.appendChild(Button)
+
+        let DeleteButton = document.createElement("button")
+        DeleteButton.innerHTML = "Clear"
+        let DeleteButtonDiv = document.createElement("div")
+        DeleteButtonDiv.appendChild(DeleteButton)
+        SearchDiv.appendChild(DeleteButtonDiv)
+
+        
+        
+       
+
+        Button.addEventListener("click", function() {
+            Link(this.parentNode.parentNode)
+    })
+
+    DeleteButton.addEventListener("click", function() {
+            DeleteHistory(this.parentNode.parentNode)
+    })
+    }
+    
+}
+
+function Link(card) {
+    console.log(card)
+
+    let Title = card.getElementsByClassName("TitleH")[0].getElementsByClassName("Search")[0].innerHTML
+    console.log(Title)
+
+    let total = ""+Title
+
+    //OPENING the info page (has further detail on the topic)
+    let infoOpen = document.createElement("a")
+    infoOpen.href = "detail.html?total="+total
+    infoOpen.click()
+
+}
+
+async function DeleteHistory(card) {
+    console.log(card)
+
+    let Title = card.getElementsByClassName("TitleH")[0].getElementsByClassName("Search")[0].innerHTML
+    console.log(Title)
+
+    let request = await fetch(`/DeleteHistory?info=${Title}`)
+    let response = await request.json()
+    console.log(response)
+
+    card.remove(card)
+}
+
+async function DeleteProfile() {
+    let request = await fetch(`/deleteProfile`)
+    let response = await request.json()
+    console.log(response)
+
+    //OPENING the info page (has further detail on the topic)
+    let login = document.createElement("a")
+    login.href = "index.html"
+    login.click()
+
+    
+}
+
+
+
+</script>

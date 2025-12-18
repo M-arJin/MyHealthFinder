@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+
+<body>
+
+    <div id="header">
+      
+            <img id="logo" src="logo.png">
+ 
+        <h1>AppleADay</h1>
+    </div>
+    <div id="MainDiv">
+        <div id="LoginDiv">
+
+            <div id="UsernameDiv">
+                <h1>Username:</h1>
+                <input id="Username">
+            </div>
+
+            <div id="PasswordDiv">
+                <h1>Password:</h1>
+                <input id="Password" type="password">
+            </div>
+                
+            <div id="LoginButtonDiv">
+                <button onclick="login()" id="LoginButton">Submit</button>
+            </div>
+
+            <a href="home.html">Would you like to go Anonymous?</a>
+            
+    
+    
+            <a href="rego.html">Register?</a>
+    
+        </div>
+    </div>
+    
+
+</body>
+
+<script>
+    async function login() {
+        let Username = document.getElementById("Username").value
+        let Password = document.getElementById("Password").value
+
+        console.log(Username)
+        console.log(Password)
+
+       let data = await fetch(`/login?userInfo=${Username}, ${Password}`)
+       let request = await data.json()
+
+       if (request === "success") {
+            let link = document.createElement("a")
+            link.href = "home.html"
+            link.click()
+       } else {
+           alert("Information Incorrect, Try again!")
+       }
+
+       console.log(request)
+    }
+</script>

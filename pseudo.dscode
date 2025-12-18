@@ -1,0 +1,65 @@
+
+//INSERTS TOPICS the user may have accessed into a database
+BEGIN
+//CONTAINS all API data
+DECLARE Package = []
+//currentUser variable would be set once the user logs in
+DECLARE currentUser = ?
+app.get(
+    "search",
+    FUNCTION (request, response) 
+    //SELECTION
+    DECLARE InsertInformation = request.query.userSearch
+        //ITERATION
+        FOR i = 0 to package.length 
+            DECLARE currentTopic = package[i].TITLE
+            //CONDITION
+            IF InsertInformation === currentTopic THEN 
+                DECLARE search = currentTopic.ENCRYPT(AES)
+                EXECUTE SQL ("INSERT INTO SEARCHH (USER_ID, SEARCHES) 
+                VALUES (currentUSER, search)")
+                response.json("success")
+                RETURN
+            END IF
+        END FOR
+        response.json("fail")
+        RETURN
+    END FUNCTION
+)
+END
+
+
+BEGIN
+//ASSIGNMENT
+DECLARE Package = []
+app.get (
+    "info",
+    FUNCTION (request, response)
+        DECLARE API = await fetch from (https://health.gov/myhealthfinder/api/v3/myhealthfinder.json?lang=en&age=17&sex=male)
+        DECLARE results = await API.json()
+        //ITERATION
+        FOR i = 0 to results.length
+            DECLARE TopicObj = {}
+            //ASSIGNMENT
+            TopicObj.Title = results[i].TITLE
+            TopicObj.Catgories = results[i].CATEGORIES
+            TopicObj.Content = results[i].CONTENT 
+            TopicObj.Image = results[i].IMAGEURL
+            TopicObj.Detail = []
+
+            //ITTERATION 
+            FOR j = 0 to results.length
+                DECLARE DetailObj = {}
+                DetailObj.Title = Content[j].TITLE
+                DetailObj.Content = Content[j].CONTENT
+                TopicObj.Detail.push(DetailObj)
+            END FOR
+            Package.push(TopicObj)
+        END FOR
+        DECLARE Resources = JSON.stringify(Package)
+        response.json(Resources)
+    END FUNCTION 
+)
+END 
+
+

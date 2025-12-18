@@ -1,0 +1,228 @@
+#header {
+    display: flex;
+    height: 20vh;
+    background-color: darkred;
+    border: solid black 3px;
+    justify-content: center;
+    align-items: center;
+    color: greenyellow;
+    font-size: 26px;
+    
+}
+
+#bookmark {
+    width: 50px;
+    height: 50px;
+}
+
+#userNAME {
+    display: flex;
+    font-size: 30px;
+}
+
+#logo {
+    height: 155px;
+    width: 160px;
+}
+
+#SearchButton {
+    font-size: 25px;
+}
+
+
+#search {
+    font-size: 25px;
+}
+
+#SearchDiv {
+    display: flex;
+    align-items: center;
+    background-color: antiquewhite;
+    justify-content: space-evenly;
+}
+
+.HistorySearchDiv {
+    display: flex;
+    border: solid black 2px;
+    background-color: ghostwhite;
+    flex-direction: column;
+    width: 160px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#PFP {
+    height: 50px;
+    width: 50px;
+    border: black solid 2px;
+    margin: 10px;
+}
+
+#userDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+#EditProperties {
+    display: flex;
+    background-color: antiquewhite;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: solid black 3px;
+    padding: 5px;
+}
+
+#LoginDiv {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 10px;
+    width: 500px;
+    font-size: 25px;
+    text-align: center;
+    
+}
+
+#RegoDiv {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    padding: 5px;
+    width: 500px;
+    font-size: 18px;
+    text-align: center;
+}
+
+#Password {
+    font-size: 20px;
+}
+#cPassword {
+    font-size: 20px;
+}
+#Username {
+    font-size: 20px;
+}
+
+#MainDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: antiquewhite;
+    height: 75vh;
+    overflow-y: hidden;
+}
+
+#Overall {
+    display: flex;
+   flex-direction: column;
+    justify-content: center;
+    background-color: antiquewhite;
+}
+
+#LoginButton {
+    font-size: 20px;
+    width: 100px;
+}
+
+#SearchH {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    
+}
+
+
+
+.IMAGE {
+    width: 200px;
+    height: 200px;
+    border: black solid 2px;
+}
+
+.DETAILIMAGE {
+    width: 300px;
+    height: 300px;
+    border: black solid 2px;
+}
+
+.INDEXDIV {
+    visibility: hidden;
+}
+
+.CARD {
+    display: flex;
+    border: black solid 3px;
+    width: 300px;
+    height: 550px;
+    flex-direction: column;
+    padding: 8px;
+    margin: 10px;
+    background-color: gainsboro;
+    text-align: center;
+}
+
+
+.DETAILBUTTON {
+    background-color: red;
+    border: black solid 1px;
+    color: white;
+    padding: 15px 18px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 20px;
+    height:50px;
+    width: 250px;
+    margin: 5px;
+
+}
+
+.IMAGEDIVDETAIL {
+    display: flex;
+    justify-content: center;
+
+}
+
+#main {
+    display: flex;
+    background-color: antiquewhite;
+    justify-content: center;
+}
+
+#data {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#detail {
+    display: flex;
+    flex-direction: column;
+    width: 1400px;
+    font-size: 20px;
+    padding: 20px;
+    margin: 20px;
+    border: solid black 4px;
+
+}
+
+.TITLE {
+    height: 100px;
+}
+.CATEGORIES {
+    height: 100px;
+}
+.TIME {
+    height: 50px;
+}
+.IMAGEDIV {
+    height: 200px;
+}

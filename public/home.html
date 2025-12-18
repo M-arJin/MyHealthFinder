@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+
+<body>
+    <div id="header">
+        <a href="home.html" title="Apples">
+            <img id="logo" src="logo.png">
+        </a>
+        <h1>AppleADay</h1>
+    </div>
+
+    <div id="userDiv">
+        <p1 id="userNAME"></p1>
+        <a href="profile.html">
+            <img id="PFP" src="profile.jpg">
+        </a>
+        
+        <label>Espanol</label>
+        <input type="checkbox" id="myCheck" onclick="LanguageSwap()">
+
+        <a href="bookmark.html">
+            <img id="bookmark" src="bookmark.png">
+        </a>
+
+    </div>
+
+    <div id="SearchDiv">
+        <div>
+            <input id="search">
+            <button id="SearchButton" onclick="search()">Search</button>
+        </div>
+    </div>
+
+    
+    
+    
+
+    
+    <div id="main">
+        <div id="data"></div>
+    </div>
+
+</body>
+
+
+<script>
+
+
+
+
+
+
+
+async function LanguageSwap() {
+    var data = document.getElementById('data');
+    data.innerHTML = ""
+    var checkBox = document.getElementById("myCheck");
+    let value = checkBox.checked
+
+    let dataRequest = await fetch (`/LanguageSwitch?info=${value}`)
+    let result = await dataRequest.json()
+    console.log(result)
+    run()
+}
+
+run()
+User()
+let anon = "0"
+let nugget
+
+
+
+async function User() {
+    var data = document.getElementById('data');
+
+    let UserDetails = await fetch(`/userdetails`)
+    let result = await UserDetails.json()
+    console.log(result)
+
+    let userID = result[0].ID
+    let userName = result[0].Name
+    nugget = userID
+    console.log(userID)
+    console.log(userName)
+    let userNameDisplay = document.getElementById("userNAME")
+
+    if (userName === "") {
+        userNameDisplay.innerHTML = "Anonymous"
+        anon = "1"
+        return
+    }
+    
+    
+    userNameDisplay.innerHTML = userName
+}
+
+
+async function search() {
+    var data = document.getElementById('data');
+    let input = document.getElementById("search").value
+
+    let info = await fetch(`/search?input=${input}`)
+    let result = await info.json()
+    
+    if (result === "fail"){
+        alert("Sorry there are no results! :( try another query please)")
+        return
+    }
+
+    //Clears the div
+    data.innerHTML = ""
+
+    let information = JSON.parse(result)
+
+    for (let i = 0; i < information.length; i++) {
+        let Title = information[i].Title
+        let Categories = information[i].Categories
+        let Time = information[i].LastUpdate
+        let Image = information[i].ImageURL
+
+        var utcSeconds = Time;
+        var TimeConverted = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        TimeConverted.setUTCSeconds(utcSeconds);
+
+        let card = document.createElement("div")
+        card.classList.add("CARD")
+        data.appendChild(card)
+
+        let TitleDiv = document.createElement("div")
+        card.appendChild(TitleDiv)
+        TitleDiv.classList.add("TITLE")
+        let TitleDisplay = document.createElement("h2")
+        TitleDisplay.classList.add("titleDisplay")
+        TitleDisplay.innerHTML = Title
+        TitleDiv.appendChild(TitleDisplay)
+
+        let IndexDiv = document.createElement("div")
+        card.appendChild(IndexDiv)
+        IndexDiv.classList.add("INDEXDIV")
+        let Index = document.createElement("p1")
+        Index.classList.add("INDEX")
+        Index.innerHTML = i
+        IndexDiv.appendChild(Index)
+
+        let CategoriesDiv = document.createElement("div")
+        card.appendChild(CategoriesDiv)
+        CategoriesDiv.classList.add("CATEGORIES")
+        let CategoriesDisplay = document.createElement("h3")
+        CategoriesDisplay.innerHTML = Categories
+        CategoriesDiv.appendChild(CategoriesDisplay)
+
+        let TimeDiv = document.createElement("div")
+        card.appendChild(TimeDiv)
+        TimeDiv.classList.add("TIME")
+        let TimeDisplay = document.createElement("p1")
+
+        TimeDisplay.innerHTML = TimeConverted
+        TimeDiv.appendChild(TimeDisplay)
+        
+
+        let DetailDiv = document.createElement("div")
+        card.appendChild(DetailDiv)
+        let DetailButton = document.createElement("button")
+        DetailButton.classList.add("DETAILBUTTON")
+        DetailButton.innerHTML = "OPEN"
+        DetailDiv.appendChild(DetailButton)
+
+
+        let ImageDiv = document.createElement("div")
+        card.appendChild(ImageDiv)
+        ImageDiv.classList.add("IMAGEDIV")
+        let ImageDisplay = document.createElement("img")
+        ImageDisplay.classList.add("IMAGE")
+        ImageDisplay.src = Image
+        ImageDiv.appendChild(ImageDisplay)
+
+        DetailButton.addEventListener("click", function() {
+            LinkDetail(this.parentNode.parentNode)
+        })
+    }
+
+}
+
+async function run() { 
+    var data = document.getElementById('data');
+    let response = await fetch(`/info`)
+    let concept = await response.json()
+  
+    let information = JSON.parse(concept)
+    
+    for (let i = 0; i < information.length; i++) {
+ 
+        let Title = information[i].Title
+        let Categories = information[i].Categories
+        let Time = information[i].LastUpdate
+        let Image = information[i].ImageURL
+
+        var utcSeconds = Time;
+        var TimeConverted = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        TimeConverted.setUTCSeconds(utcSeconds);
+        //STACKOVERFLOW
+
+        let card = document.createElement("div")
+        card.classList.add("CARD")
+        data.appendChild(card)
+
+        let TitleDiv = document.createElement("div")
+        card.appendChild(TitleDiv)
+        TitleDiv.classList.add("TITLE")
+        let TitleDisplay = document.createElement("h2")
+        TitleDisplay.classList.add("titleDisplay")
+        TitleDisplay.innerHTML = Title
+        TitleDiv.appendChild(TitleDisplay)
+
+        let IndexDiv = document.createElement("div")
+        card.appendChild(IndexDiv)
+        IndexDiv.classList.add("INDEXDIV")
+        let Index = document.createElement("p1")
+        Index.classList.add("INDEX")
+        Index.innerHTML = i
+        IndexDiv.appendChild(Index)
+
+        let CategoriesDiv = document.createElement("div")
+        card.appendChild(CategoriesDiv)
+        CategoriesDiv.classList.add("CATEGORIES")
+        let CategoriesDisplay = document.createElement("h3")
+        CategoriesDisplay.innerHTML = Categories
+        CategoriesDiv.appendChild(CategoriesDisplay)
+
+        let TimeDiv = document.createElement("div")
+        card.appendChild(TimeDiv)
+        TimeDiv.classList.add("TIME")
+        let TimeDisplay = document.createElement("p1")
+
+        TimeDisplay.innerHTML = TimeConverted
+        TimeDiv.appendChild(TimeDisplay)
+        
+
+        let DetailDiv = document.createElement("div")
+        card.appendChild(DetailDiv)
+        let DetailButton = document.createElement("button")
+        DetailButton.classList.add("DETAILBUTTON")
+        DetailButton.innerHTML = "OPEN"
+        DetailDiv.appendChild(DetailButton)
+
+
+        let ImageDiv = document.createElement("div")
+        card.appendChild(ImageDiv)
+        ImageDiv.classList.add("IMAGEDIV")
+        let ImageDisplay = document.createElement("img")
+        ImageDisplay.classList.add("IMAGE")
+        ImageDisplay.src = Image
+        ImageDiv.appendChild(ImageDisplay)
+
+        DetailButton.addEventListener("click", function() {
+            LinkDetail(this.parentNode.parentNode)
+        })
+    }
+}
+
+async function LinkDetail(Card) {
+    console.log(Card)
+
+    let Title = Card.getElementsByClassName("TITLE")[0].getElementsByClassName("titleDisplay")[0].innerHTML
+    console.log(Title)
+
+    let total = ""+Title
+
+    if (anon === "0") {
+        let send = await fetch(`/History?Title=${Title}, ${nugget}`)
+        let result = await send.json()
+        console.log(result)
+    } 
+    
+
+    //OPENING the info page (has further detail on the topic)
+    let infoOpen = document.createElement("a")
+    infoOpen.href = "detail.html?total="+total
+    infoOpen.click()
+ 
+}
+
+</script>
